@@ -1,10 +1,9 @@
 package com.stein.spacelunch.ui.upcoming_list
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,22 +18,21 @@ fun UpcomingListScreen(
     viewModel: UpcomingListViewModel = hiltViewModel()
 ) {
     val items by viewModel.uiState.collectAsStateWithLifecycle()
-    if (items is UpcomingListUiState.Success) {
-        UpcomingListScreen(
-            item = (items as UpcomingListUiState.Success).data,
-            modifier = modifier
-        )
-    }
     when (items) {
         is UpcomingListUiState.Success -> {
             UpcomingListScreen(
-                item = (items as UpcomingListUiState.Success).data,
-                modifier = modifier
+                items = (items as UpcomingListUiState.Success).data,
+                modifier = modifier,
+                onAddItem = { viewModel.addItems() },
             )
         }
 
-        else -> {
-            //todo add loading and error states
+        is UpcomingListUiState.Loading -> {
+            //todo add loading screen
+        }
+
+        is UpcomingListUiState.Error -> {
+            //todo add error screen
         }
     }
 }
@@ -42,16 +40,19 @@ fun UpcomingListScreen(
 @Composable
 internal fun UpcomingListScreen(
     modifier: Modifier = Modifier,
-    item: Int,
+    items: List<String>,
+    onAddItem: () -> Unit,
 ) {
-    Column(modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(item.toString())
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp),
+    ) {
+        for (item in items) {
+            Text(item)
+        }
+        Button(onClick = onAddItem) {
+            Text(text = "Add")
         }
     }
 }
