@@ -1,3 +1,5 @@
+import com.android.build.api.variant.BuildConfigField
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -50,10 +52,24 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+androidComponents {
+    onVariants {
+        it.buildConfigFields.put(
+            "API_BASE_URL", BuildConfigField(
+                "String", "\"https://ll.thespacedevs.com/2.2.0/\"", "Base api url for the app"
+            )
+        )
+    }
 }
 
 dependencies {
 
+    //AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -81,6 +97,11 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
 
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofitConverterGson)
+
+    //Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

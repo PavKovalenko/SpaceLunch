@@ -21,5 +21,8 @@ interface UpcomingModelDao {
     fun getUpcomings(): Flow<List<UpcomingModel>>
 
     @Insert
-    suspend fun insertUpcoming(item: UpcomingModel)
+    suspend fun insertUpcomings(item: List<UpcomingModel>)
+
+    @Query("DELETE FROM upcomingmodel")
+    suspend fun nukeTable()
 }
