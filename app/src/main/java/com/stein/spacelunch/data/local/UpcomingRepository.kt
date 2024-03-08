@@ -13,7 +13,7 @@ interface UpcomingRepository {
     suspend fun update()
 }
 
-class DefaultUpcomingRepository @Inject constructor(
+class UpcomingRepositoryImpl @Inject constructor(
     private val upcomingNetworkDataSource: UpcomingNetworkDataSource,
     private val upcomingLocalDataSource: UpcomingLocalDataSource
 ) : UpcomingRepository {

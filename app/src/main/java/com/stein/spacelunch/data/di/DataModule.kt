@@ -1,7 +1,7 @@
 package com.stein.spacelunch.data.di
 
-import com.stein.spacelunch.data.local.DefaultUpcomingRepository
 import com.stein.spacelunch.data.local.UpcomingRepository
+import com.stein.spacelunch.data.local.UpcomingRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ interface DataModule {
     @Singleton
     @Binds
     fun bindsUpcomingRepository(
-        upcomingRepository: DefaultUpcomingRepository
+        upcomingRepository: UpcomingRepositoryImpl
     ): UpcomingRepository
 }
 
