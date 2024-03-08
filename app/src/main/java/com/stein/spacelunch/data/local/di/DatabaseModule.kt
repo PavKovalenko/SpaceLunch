@@ -3,6 +3,8 @@ package com.stein.spacelunch.data.local.di
 import android.content.Context
 import androidx.room.Room
 import com.stein.spacelunch.data.local.database.AppDatabase
+import com.stein.spacelunch.data.local.database.UpcomingLocalDataSource
+import com.stein.spacelunch.data.local.database.UpcomingLocalDataSourceImpl
 import com.stein.spacelunch.data.local.database.UpcomingModelDao
 import dagger.Module
 import dagger.Provides
@@ -27,5 +29,10 @@ class DatabaseModule {
             AppDatabase::class.java,
             "Upcoming"
         ).build()
+    }
+
+    @Provides
+    fun provideUpcomingLocalDataSource(upcomingModelDao: UpcomingModelDao): UpcomingLocalDataSource {
+        return UpcomingLocalDataSourceImpl(upcomingModelDao)
     }
 }

@@ -25,7 +25,7 @@ interface DataModule {
 class FakeUpcomingRepository @Inject constructor() : UpcomingRepository {
     override val upcomings: Flow<List<String>> = flowOf(fakeUpcomings)
 
-    override suspend fun addUpcoming(name: String) {
+    override suspend fun update() {
         // no-op
     }
 }

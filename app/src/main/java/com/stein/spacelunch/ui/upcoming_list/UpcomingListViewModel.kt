@@ -27,9 +27,9 @@ class UpcomingListViewModel @Inject constructor(
                 UpcomingListUiState.Loading
             )
 
-    fun addItems() {
+    init {
         viewModelScope.launch {
-            upcomingRepository.addUpcoming("Test upcoming")
+            upcomingRepository.update()
         }
     }
 
