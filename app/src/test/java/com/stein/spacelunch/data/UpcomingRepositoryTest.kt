@@ -1,7 +1,5 @@
 package com.stein.spacelunch.data
 
-import com.stein.spacelunch.data.local.UpcomingRepository
-import com.stein.spacelunch.data.local.UpcomingRepositoryImpl
 import com.stein.spacelunch.data.local.database.UpcomingLocalDataSource
 import com.stein.spacelunch.data.local.database.UpcomingModel
 import com.stein.spacelunch.data.network.UpcomingNetworkDataSource

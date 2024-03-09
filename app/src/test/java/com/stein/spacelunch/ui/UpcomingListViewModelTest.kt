@@ -1,8 +1,7 @@
 package com.stein.spacelunch.ui
 
 import com.stein.spacelunch.MainDispatcherRule
-import com.stein.spacelunch.data.di.fakeUpcomings
-import com.stein.spacelunch.data.local.UpcomingRepository
+import com.stein.spacelunch.data.UpcomingRepository
 import com.stein.spacelunch.ui.upcoming_list.UpcomingListUiState
 import com.stein.spacelunch.ui.upcoming_list.UpcomingListViewModel
 import io.mockk.coEvery
@@ -27,6 +26,8 @@ class UpcomingListViewModelTest {
 
     @RelaxedMockK
     lateinit var upcomingRepository: UpcomingRepository
+
+    private val fakeUpcomings = listOf("One", "Two", "Three")
 
     @Test
     fun whenLaunch_repositoryCallUpdate() = runTest {

@@ -2,7 +2,7 @@ package com.stein.spacelunch.ui.upcoming_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stein.spacelunch.data.local.UpcomingRepository
+import com.stein.spacelunch.data.UpcomingRepository
 import com.stein.spacelunch.ui.upcoming_list.UpcomingListUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
