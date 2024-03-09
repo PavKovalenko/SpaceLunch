@@ -1,4 +1,4 @@
-package com.stein.spacelunch.data.local
+package com.stein.spacelunch.data
 
 import com.stein.spacelunch.data.local.database.UpcomingLocalDataSource
 import com.stein.spacelunch.data.network.UpcomingNetworkDataSource
@@ -13,7 +13,7 @@ interface UpcomingRepository {
     suspend fun update()
 }
 
-class DefaultUpcomingRepository @Inject constructor(
+class UpcomingRepositoryImpl @Inject constructor(
     private val upcomingNetworkDataSource: UpcomingNetworkDataSource,
     private val upcomingLocalDataSource: UpcomingLocalDataSource
 ) : UpcomingRepository {
