@@ -1,19 +1,17 @@
-package com.stein.spacelunch.ui.upcoming_list
+package com.stein.spacelunch.ui.upcoming_list.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.stein.spacelunch.data.model.Upcoming
+import com.stein.spacelunch.ui.upcoming_list.UpcomingListUiState
+import com.stein.spacelunch.ui.upcoming_list.UpcomingListViewModel
 
 @Composable
 fun UpcomingListScreen(
-    modifier: Modifier = Modifier,
     viewModel: UpcomingListViewModel = hiltViewModel()
 ) {
     val items by viewModel.uiState.collectAsStateWithLifecycle()
@@ -21,7 +19,6 @@ fun UpcomingListScreen(
         is UpcomingListUiState.Success -> {
             UpcomingListScreen(
                 items = (items as UpcomingListUiState.Success).data,
-                modifier = modifier,
             )
         }
 
@@ -37,16 +34,11 @@ fun UpcomingListScreen(
 
 @Composable
 internal fun UpcomingListScreen(
-    modifier: Modifier = Modifier,
-    items: List<String>,
+    items: List<Upcoming>,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 24.dp),
-    ) {
-        for (item in items) {
-            Text(item)
+    LazyColumn {
+        items(items) { item ->
+            UpcomingItem(item)
         }
     }
 }

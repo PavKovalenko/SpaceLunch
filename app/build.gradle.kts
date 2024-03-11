@@ -103,6 +103,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofitConverterGson)
 
+    //Coil
+    implementation(libs.coil)
+
     //Test
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

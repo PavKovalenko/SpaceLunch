@@ -4,15 +4,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface UpcomingLocalDataSource {
     fun getUpcomings(): Flow<List<UpcomingModel>>
-    suspend fun updateUpcomings(upcomings: List<String>)
+    suspend fun updateUpcomings(upcomings: List<UpcomingModel>)
 }
 
 class UpcomingLocalDataSourceImpl(private val upcomingModelDao: UpcomingModelDao) :
     UpcomingLocalDataSource {
     override fun getUpcomings() = upcomingModelDao.getUpcomings()
 
-    override suspend fun updateUpcomings(upcomings: List<String>) {
+    override suspend fun updateUpcomings(upcomings: List<UpcomingModel>) {
         upcomingModelDao.nukeTable()
-        upcomingModelDao.insertUpcomings(upcomings.map { UpcomingModel(it) })
+        upcomingModelDao.insertUpcomings(upcomings)
     }
 }
