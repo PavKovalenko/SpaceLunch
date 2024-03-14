@@ -7,7 +7,7 @@ on:
 
 jobs:
   Unit-test:
-  name: Run unit tests on PR in main
+  name: Run_unit_tests_on_PR_in_main
   runs-on: ubuntu-20.04
 
   steps:
