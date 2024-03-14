@@ -4,7 +4,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.stein.spacelunch.data.fakeUpcomings
-import com.stein.spacelunch.ui.upcoming_list.UpcomingListScreen
+import com.stein.spacelunch.ui.upcoming_list.ui.UpcomingListScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before

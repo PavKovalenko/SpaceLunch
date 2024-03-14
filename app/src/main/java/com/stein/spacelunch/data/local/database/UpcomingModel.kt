@@ -6,10 +6,16 @@ import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Entity
 data class UpcomingModel(
-    val name: String
+    val name: String,
+    val statusName: String,
+    val launchProvider: String,
+    val podLocation: String?,
+    val image: String,
+    val windowEnd: Date,
 ) {
     @PrimaryKey(autoGenerate = true)
     var uid: Int = 0

@@ -86,6 +86,7 @@ dependencies {
     //Room
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.graphics.shapes.android)
     ksp(libs.androidx.room.compiler)
 
     // Hilt Dependency Injection
@@ -102,6 +103,9 @@ dependencies {
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofitConverterGson)
+
+    //Coil
+    implementation(libs.coil)
 
     //Test
     testImplementation(libs.junit)
