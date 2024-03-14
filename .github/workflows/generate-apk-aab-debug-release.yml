@@ -13,7 +13,7 @@ on:
     branches:
       - 'develop/**'
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflows manually from the Actions tab
   workflow_dispatch:
 
 jobs:
