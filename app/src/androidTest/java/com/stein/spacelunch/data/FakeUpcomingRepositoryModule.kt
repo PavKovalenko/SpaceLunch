@@ -1,6 +1,9 @@
 package com.stein.spacelunch.data
 
 import com.stein.spacelunch.data.di.DataModule
+import com.stein.spacelunch.data.model.Upcoming
+import com.stein.spacelunch.data.model.toUpcoming
+import com.stein.spacelunch.fakeUpcomings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -18,13 +21,11 @@ object FakeInventoryRepositoryModule {
     @Singleton
     @Provides
     fun provideFakeInventoryRepository() = object : UpcomingRepository {
-        override val upcomings: Flow<List<String>>
-            get() = flowOf(fakeUpcomings)
+        override val upcomings: Flow<List<Upcoming>>
+            get() = flowOf(fakeUpcomings.map { it.toUpcoming() })
 
-        override suspend fun update() {
+        override suspend fun update(onFailure: (Throwable) -> Unit) {
             // no-op
         }
     }
 }
-
-val fakeUpcomings = listOf("One", "Two", "Three")
