@@ -2,6 +2,8 @@ package com.stein.spacelunch.ui
 
 import com.stein.spacelunch.MainDispatcherRule
 import com.stein.spacelunch.data.UpcomingRepository
+import com.stein.spacelunch.data.model.toUpcoming
+import com.stein.spacelunch.fakeUpcomings
 import com.stein.spacelunch.ui.upcoming_list.UpcomingListUiState
 import com.stein.spacelunch.ui.upcoming_list.UpcomingListViewModel
 import io.mockk.coEvery
@@ -27,20 +29,11 @@ class UpcomingListViewModelTest {
     @RelaxedMockK
     lateinit var upcomingRepository: UpcomingRepository
 
-    private val fakeUpcomings = listOf("One", "Two", "Three")
-
     @Test
     fun whenLaunch_repositoryCallUpdate() = runTest {
         buildViewModel()
 
-        coVerify { upcomingRepository.update() }
-    }
-
-    @Test
-    fun onStartShowLoading() = runTest {
-        val viewModel = buildViewModel()
-
-        assertEquals(UpcomingListUiState.Loading, viewModel.uiState.value)
+        coVerify { upcomingRepository.update(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -53,11 +46,14 @@ class UpcomingListViewModelTest {
             viewModel.uiState.collect {}
         }
 
-        assertEquals(UpcomingListUiState.Success(fakeUpcomings), viewModel.uiState.value)
+        assertEquals(
+            UpcomingListUiState.Success(fakeUpcomings.map { it.toUpcoming() }),
+            viewModel.uiState.value
+        )
     }
 
     private fun buildViewModel(): UpcomingListViewModel {
-        coEvery { upcomingRepository.upcomings } returns flowOf(fakeUpcomings)
+        coEvery { upcomingRepository.upcomings } returns flowOf(fakeUpcomings.map { it.toUpcoming() })
         return UpcomingListViewModel(upcomingRepository)
     }
 

@@ -2,9 +2,14 @@ package com.stein.spacelunch.data
 
 import com.stein.spacelunch.data.local.database.UpcomingLocalDataSource
 import com.stein.spacelunch.data.local.database.UpcomingModel
+import com.stein.spacelunch.data.model.toUpcoming
 import com.stein.spacelunch.data.network.UpcomingNetworkDataSource
 import com.stein.spacelunch.data.network.model.ApiUpcoming
 import com.stein.spacelunch.data.network.model.ApiUpcomings
+import com.stein.spacelunch.data.network.model.LaunchServiceProvider
+import com.stein.spacelunch.data.network.model.Pad
+import com.stein.spacelunch.data.network.model.Status
+import com.stein.spacelunch.fakeUpcomings
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -16,6 +21,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import java.util.Date
 
 class UpcomingRepositoryTest {
     @get:Rule
@@ -47,13 +53,11 @@ class UpcomingRepositoryTest {
 
     @Test
     fun whenUpcomingsReturnList_thenMapAndReturnItCorrectly() = runTest {
-        val fakeUpcomings =
-            listOf(UpcomingModel("One"), UpcomingModel("Two"), UpcomingModel("Three"))
         coEvery { upcomingLocalDataSource.getUpcomings() } returns flowOf(fakeUpcomings)
         val repository = buildRepository()
 
-        repository.upcomings.collect {
-            assertEquals(fakeUpcomings.map { it.name }, it)
+        repository.upcomings.collect { upcomings ->
+            assertEquals(fakeUpcomings.map { it.toUpcoming() }, upcomings)
         }
     }
 
@@ -72,14 +76,40 @@ class UpcomingRepositoryTest {
             id = 1,
             next = "next",
             previous = "previous",
-            results = listOf(ApiUpcoming("One"), ApiUpcoming("Two")),
+            results = listOf(
+                ApiUpcoming(
+                    name = "One",
+                    status = Status(),
+                    launchServiceProvider = LaunchServiceProvider(),
+                    pad = Pad(),
+                    windowEnd = Date(),
+                ),
+                ApiUpcoming(
+                    name = "Two",
+                    status = Status(),
+                    launchServiceProvider = LaunchServiceProvider(),
+                    pad = Pad(),
+                    windowEnd = Date(),
+                )
+            ),
         )
         coEvery { upcomingNetworkDataSource.getUpcomings() } returns flowOf(fakeUpcomings)
         val repository = buildRepository()
 
         repository.update()
 
-        coVerify { upcomingLocalDataSource.updateUpcomings(fakeUpcomings.results.map { it.name }) }
+        coVerify {
+            upcomingLocalDataSource.updateUpcomings(fakeUpcomings.results.map {
+                UpcomingModel(
+                    name = it.name,
+                    statusName = it.status.name,
+                    launchProvider = it.launchServiceProvider.name,
+                    podLocation = it.pad.location?.name,
+                    image = it.image,
+                    windowEnd = it.windowEnd
+                )
+            })
+        }
     }
 
     private fun buildRepository(): UpcomingRepository {

@@ -22,30 +22,30 @@ data class ApiUpcoming(
 
 data class Status(
     @SerializedName("id")
-    val id: Long,
+    val id: Long = 0,
     @SerializedName("name")
     val name: String = ""
 )
 
 data class LaunchServiceProvider(
     @SerializedName("id")
-    val id: Long,
+    val id: Long = 0,
     @SerializedName("name")
     val name: String = ""
 )
 
 data class Pad(
     @SerializedName("id")
-    val id: Long,
+    val id: Long = 0,
     @SerializedName("name")
     val name: String = "",
     @SerializedName("location")
-    val location: Location?,
+    val location: Location? = null,
 )
 
 data class Location(
     @SerializedName("id")
-    val id: Long,
+    val id: Long = 0,
     @SerializedName("name")
     val name: String = ""
 )
