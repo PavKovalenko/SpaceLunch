@@ -5,12 +5,15 @@ import com.stein.spacelunch.data.local.database.UpcomingModel
 import com.stein.spacelunch.data.model.Upcoming
 import com.stein.spacelunch.data.model.toUpcoming
 import com.stein.spacelunch.data.network.UpcomingNetworkDataSource
+import com.stein.spacelunch.data.network.UpcomingNetworkPagingDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 interface UpcomingRepository {
+
+    fun upcomingPagingSource(): UpcomingNetworkPagingDataSource
 
     val upcomings: Flow<List<Upcoming>>
 
@@ -19,8 +22,11 @@ interface UpcomingRepository {
 
 class UpcomingRepositoryImpl @Inject constructor(
     private val upcomingNetworkDataSource: UpcomingNetworkDataSource,
-    private val upcomingLocalDataSource: UpcomingLocalDataSource
+    private val upcomingLocalDataSource: UpcomingLocalDataSource,
+    private val upcomingNetworkPagingDataSource: UpcomingNetworkPagingDataSource,
 ) : UpcomingRepository {
+
+    override fun upcomingPagingSource() = upcomingNetworkPagingDataSource
 
     override val upcomings: Flow<List<Upcoming>> =
         upcomingLocalDataSource.getUpcomings().map { items -> items.map { it.toUpcoming() } }

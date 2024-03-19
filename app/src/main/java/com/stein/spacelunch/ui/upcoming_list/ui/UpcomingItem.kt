@@ -75,7 +75,7 @@ fun UpcomingItem(upcoming: Upcoming) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = upcoming.podLocation,
+                    text = upcoming.padLocation,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                 )
