@@ -35,7 +35,7 @@ class UpcomingListScreenTest {
             composeTestRule.onNodeWithText(item.name).assertExists()
             composeTestRule.onNodeWithText(item.launchProvider).assertExists()
             composeTestRule.onNodeWithText(item.statusName).assertExists()
-            item.podLocation?.let {
+            item.padLocation?.let {
                 composeTestRule.onNodeWithText(it).assertExists()
             }
         }

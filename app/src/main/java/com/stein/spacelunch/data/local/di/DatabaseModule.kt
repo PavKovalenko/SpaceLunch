@@ -2,10 +2,13 @@ package com.stein.spacelunch.data.local.di
 
 import android.content.Context
 import androidx.room.Room
+import com.stein.spacelunch.data.UpcomingRemoteMediator
 import com.stein.spacelunch.data.local.database.AppDatabase
+import com.stein.spacelunch.data.local.database.RemoteKeysDao
 import com.stein.spacelunch.data.local.database.UpcomingLocalDataSource
 import com.stein.spacelunch.data.local.database.UpcomingLocalDataSourceImpl
 import com.stein.spacelunch.data.local.database.UpcomingModelDao
+import com.stein.spacelunch.data.network.RetrofitBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +25,11 @@ class DatabaseModule {
     }
 
     @Provides
+    fun provideRemoteKeysDao(appDatabase: AppDatabase): RemoteKeysDao {
+        return appDatabase.remoteKeysDao()
+    }
+
+    @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
@@ -35,4 +43,14 @@ class DatabaseModule {
     fun provideUpcomingLocalDataSource(upcomingModelDao: UpcomingModelDao): UpcomingLocalDataSource {
         return UpcomingLocalDataSourceImpl(upcomingModelDao)
     }
+
+    @Provides
+    @Singleton
+    fun provideUpcomingRemoteMediator(appDatabase: AppDatabase): UpcomingRemoteMediator {
+        return UpcomingRemoteMediator(
+            service = RetrofitBuilder.apiService,
+            appDatabase = appDatabase,
+        )
+    }
+
 }

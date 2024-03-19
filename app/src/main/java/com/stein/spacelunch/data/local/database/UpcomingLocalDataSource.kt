@@ -12,7 +12,7 @@ class UpcomingLocalDataSourceImpl(private val upcomingModelDao: UpcomingModelDao
     override fun getUpcomings() = upcomingModelDao.getUpcomings()
 
     override suspend fun updateUpcomings(upcomings: List<UpcomingModel>) {
-        upcomingModelDao.nukeTable()
+        upcomingModelDao.clearUpcomings()
         upcomingModelDao.insertUpcomings(upcomings)
     }
 }
