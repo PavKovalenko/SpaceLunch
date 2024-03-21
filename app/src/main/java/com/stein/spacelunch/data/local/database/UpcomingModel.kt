@@ -27,6 +27,9 @@ interface UpcomingModelDao {
     @Query("SELECT * FROM upcomingmodel ORDER BY windowEnd DESC LIMIT 10")
     fun getUpcomings(): Flow<List<UpcomingModel>>
 
+    @Query("SELECT * FROM upcomingmodel WHERE id = :upcomingId")
+    fun getUpcoming(upcomingId: String): Flow<UpcomingModel>
+
     @Query("SELECT * FROM upcomingmodel ORDER BY windowEnd ASC")
     fun getUpcomingsPagingSource(): PagingSource<Int, UpcomingModel>
 

@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -19,14 +20,18 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun UpcomingListScreen(
+    navHostController: NavHostController,
     viewModel: UpcomingListViewModel = hiltViewModel()
 ) {
-    UpcomingListScreen(viewModel.items)
+    UpcomingListScreen(viewModel.items) {
+        navHostController.navigate("upcoming/$it")
+    }
 }
 
 @Composable
 internal fun UpcomingListScreen(
     items: Flow<PagingData<Upcoming>>,
+    onItemClick: (String) -> Unit = {}
 ) {
     val pager = remember { items }
     val lazyPagingItems = pager.collectAsLazyPagingItems()
@@ -40,7 +45,7 @@ internal fun UpcomingListScreen(
         items(count = lazyPagingItems.itemCount) { index ->
             val item = lazyPagingItems[index]
             item?.let {
-                UpcomingItem(upcoming = it)
+                UpcomingItem(upcoming = it, onItemClick = onItemClick)
             }
         }
 

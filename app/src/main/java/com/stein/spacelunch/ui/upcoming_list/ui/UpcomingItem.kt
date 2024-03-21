@@ -1,6 +1,7 @@
 package com.stein.spacelunch.ui.upcoming_list.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,10 +26,11 @@ import com.stein.spacelunch.data.model.Upcoming
 import com.stein.spacelunch.utils.toUpcomingString
 
 @Composable
-fun UpcomingItem(upcoming: Upcoming) {
+fun UpcomingItem(upcoming: Upcoming, onItemClick: (String) -> Unit = {}) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onItemClick(upcoming.id) }
             .padding(8.dp)
     ) {
         Row {
