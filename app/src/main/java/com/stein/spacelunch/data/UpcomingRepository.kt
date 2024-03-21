@@ -1,5 +1,11 @@
 package com.stein.spacelunch.data
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.stein.spacelunch.data.local.database.AppDatabase
 import com.stein.spacelunch.data.local.database.UpcomingLocalDataSource
 import com.stein.spacelunch.data.local.database.UpcomingModel
 import com.stein.spacelunch.data.model.Upcoming
@@ -12,18 +18,28 @@ import javax.inject.Inject
 
 interface UpcomingRepository {
 
-    val upcomings: Flow<List<Upcoming>>
+    fun getUpcomingStream(): Flow<PagingData<Upcoming>>
 
     suspend fun update(onFailure: (Throwable) -> Unit = {})
 }
 
 class UpcomingRepositoryImpl @Inject constructor(
     private val upcomingNetworkDataSource: UpcomingNetworkDataSource,
-    private val upcomingLocalDataSource: UpcomingLocalDataSource
+    private val upcomingLocalDataSource: UpcomingLocalDataSource,
+    private val upcomingRemoteMediator: UpcomingRemoteMediator,
+    private val database: AppDatabase,
 ) : UpcomingRepository {
 
-    override val upcomings: Flow<List<Upcoming>> =
-        upcomingLocalDataSource.getUpcomings().map { items -> items.map { it.toUpcoming() } }
+    override fun getUpcomingStream(): Flow<PagingData<Upcoming>> {
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
+            remoteMediator = upcomingRemoteMediator
+        ) {
+            database.upcomingModelDao().getUpcomingsPagingSource()
+        }.flow
+            .map { pagingData -> pagingData.map { it.toUpcoming() } }
+    }
 
     override suspend fun update(onFailure: (Throwable) -> Unit) {
         upcomingNetworkDataSource.getUpcomings()
@@ -33,14 +49,19 @@ class UpcomingRepositoryImpl @Inject constructor(
             .collect { apiUpcomings ->
                 upcomingLocalDataSource.updateUpcomings(apiUpcomings.results.map {
                     UpcomingModel(
+                        id = it.id,
                         name = it.name,
                         statusName = it.status.name,
                         launchProvider = it.launchServiceProvider.name,
-                        podLocation = it.pad.location?.name,
+                        padLocation = it.pad.location?.name,
                         image = it.image,
                         windowEnd = it.windowEnd
                     )
                 })
             }
+    }
+
+    companion object {
+        private const val NETWORK_PAGE_SIZE = 10
     }
 }
