@@ -31,5 +31,5 @@ val fakeUpcomings =
             padLocation = "padLocation_3",
             image = "image",
             windowEnd = Date(),
-        )
+        ),
     )

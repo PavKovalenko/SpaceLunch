@@ -7,6 +7,7 @@ import com.stein.spacelunch.fakeUpcomings
 import com.stein.spacelunch.ui.upcoming_list.ui.UpcomingListScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +31,7 @@ class UpcomingListScreenTest {
 
 
     @Test
-    fun verifyThatAllReceivedItemsAreDisplayed() {
+    fun verifyThatAllReceivedItemsAreDisplayed() = runTest {
         fakeUpcomings.forEach { item ->
             composeTestRule.onNodeWithText(item.name).assertExists()
             composeTestRule.onNodeWithText(item.launchProvider).assertExists()
